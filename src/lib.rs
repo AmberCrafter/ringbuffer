@@ -18,7 +18,7 @@ use alloc::vec::Vec;
 /// # Example:
 ///
 /// ```
-/// use ring_buffer::RingBuffer;
+/// use ringbuffer::RingBuffer;
 ///
 /// fn ring_value() {
 ///     let size = 10;
