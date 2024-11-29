@@ -1,0 +1,49 @@
+name: CI
+
+on:
+    push:
+        branches: [main]
+
+jobs:
+    unittest:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions-rs/toolchain@v1
+              with:
+                toolchain: stable
+                override: ture
+                components: rustfmt, clippy
+                profile: minimal
+
+            - name: Run unittest
+              run: |
+                Unittesting...
+                cargo test
+                Unittest Done
+
+    fmt:
+        name: Rustfmt
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions-rs/toolchain@v1
+              with:
+                profile: minimal
+                toolchain: stable
+                override: true
+            - run: rustup component add rustfmt
+            - run: cargo fmt --all -- --check
+    
+    clippy:
+        name: Clippy
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions-rs/toolchain@v1
+              with:
+                profile: minimal
+                toolchain: stable
+                override: true
+            - run: rustup component add clippy
+            - run: cargo clippy -- -D warnings
