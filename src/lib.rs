@@ -1,4 +1,3 @@
-
 #[cfg(feature = "no_std")]
 use core::error::Error;
 #[cfg(not(feature = "no_std"))]
@@ -9,37 +8,36 @@ use core::fmt::{self, Debug, Display};
 #[cfg(not(feature = "no_std"))]
 use std::fmt::{self, Debug, Display};
 
-
 #[cfg(feature = "no_std")]
 extern crate alloc;
 #[cfg(feature = "no_std")]
 use alloc::vec::Vec;
 
 /// `RingBuffer` is a constain space data structure, which maintain itself by indies of head and tail.
-/// 
+///
 /// # Example:
-/// 
+///
 /// ```
 /// use ring_buffer::RingBuffer;
-/// 
+///
 /// fn ring_value() {
 ///     let size = 10;
 ///     let mut ring = RingBuffer::init(size);
-/// 
+///
 ///     ring.push(1);
 ///     assert_eq!(Some(1), ring.pop());
 /// }
-/// 
+///
 /// fn ring_vector() {
 ///     let size = 10;
 ///     let mut ring = RingBuffer::init(size);
 ///     
 ///     let data = vec![1,2,3];
 ///     ring.pushv(data);
-/// 
+///
 ///     assert_eq!(Some(vec![1,2]), ring.popv(2));
 /// }
-/// 
+///
 /// fn main() {
 ///     ring_value();
 ///     ring_vector();
@@ -70,8 +68,7 @@ type Result<T, E = RingBufferError> = core::result::Result<T, E>;
 #[cfg(not(feature = "no_std"))]
 type Result<T, E = RingBufferError> = std::result::Result<T, E>;
 
-impl<T> RingBuffer<T>
-{
+impl<T> RingBuffer<T> {
     pub fn init(size: usize) -> Self {
         RingBuffer {
             head: 0,
@@ -86,33 +83,25 @@ impl<T> RingBuffer<T>
             head: 0,
             tail: 0,
             size: buf.len(),
-            buf
+            buf,
         }
     }
 
     pub fn init_with_box(buf: Box<[Option<T>]>) -> Self {
-        RingBuffer { 
-            head: 0, 
+        RingBuffer {
+            head: 0,
             tail: 0,
             size: buf.len(),
-            buf: buf.into_vec() 
+            buf: buf.into_vec(),
         }
     }
 
     pub fn is_full(&self) -> bool {
-        if (self.head) == (self.tail + self.size) {
-            true
-        } else {
-            false
-        }
+        (self.head) == (self.tail + self.size)
     }
 
     pub fn is_empty(&self) -> bool {
-        if (self.head) == (self.tail) {
-            true
-        } else {
-            false
-        }
+        (self.head) == (self.tail)
     }
 
     pub fn used(&self) -> usize {
@@ -137,13 +126,13 @@ impl<T> RingBuffer<T>
 
         self.buf[self.head % self.size].replace(value);
         self.head += 1;
-        
+
         Ok(())
     }
 
     pub fn pop(&mut self) -> Option<T> {
         if self.is_empty() {
-            return None
+            return None;
         }
 
         let ret = self.buf[self.tail % self.size].take();
@@ -197,8 +186,6 @@ impl<T: Debug> Debug for RingBuffer<T> {
     }
 }
 
-
-
 // fn main() {
 
 // }
@@ -210,16 +197,15 @@ mod tests {
     use super::{Result, RingBuffer};
 
     #[test]
-    fn test_init() -> Result<()>
-    {
+    fn test_init() -> Result<()> {
         let size = 5;
 
         #[cfg(not(feature = "no_std"))]
         println!("using std");
-        
+
         // #[cfg(feature = "no_std")]
         // println!("using core");
-        
+
         let mut ring: RingBuffer<i32> = RingBuffer::init(size);
         assert_eq!(ring.unused(), size);
         assert_eq!(ring.used(), 0);
@@ -334,7 +320,7 @@ mod tests {
             panic!("System Error!");
         }
 
-        Ok(())        
+        Ok(())
     }
 
     #[test]
@@ -351,7 +337,7 @@ mod tests {
         assert_eq!(Some(vec![4, 5]), ring.popv(3));
         assert_eq!(None, ring.popv(3));
 
-        Ok(())        
+        Ok(())
     }
 
     #[test]

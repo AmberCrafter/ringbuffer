@@ -18,9 +18,9 @@ jobs:
 
             - name: Run unittest
               run: |
-                Unittesting...
+                echo "Unittesting...""
                 cargo test
-                Unittest Done
+                echo "Unittest Done"
 
     fmt:
         name: Rustfmt
