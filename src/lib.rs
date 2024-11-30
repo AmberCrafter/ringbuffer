@@ -25,11 +25,11 @@ use alloc::vec::Vec;
 ///     let mut ring = RingBuffer::init(size);
 ///     assert_eq!(0, ring.head);
 ///     assert_eq!(0, ring.tail);
-/// 
+///
 ///     ring.push(1);
 ///     assert_eq!(1, ring.head);
 ///     assert_eq!(0, ring.tail);
-/// 
+///
 ///     assert_eq!(Some(1), ring.pop());
 ///     assert_eq!(1, ring.head);
 ///     assert_eq!(1, ring.tail);
@@ -45,7 +45,7 @@ use alloc::vec::Vec;
 ///
 ///     assert_eq!(Some(vec![1,2]), ring.popv(2));
 /// }
-/// 
+///
 /// fn ring_with_vector() {
 ///     let buf = vec![None; 5];
 ///     let mut ring = RingBuffer::init_with_vec(buf);
