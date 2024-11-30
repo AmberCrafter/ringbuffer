@@ -13,7 +13,7 @@ extern crate alloc;
 #[cfg(feature = "no_std")]
 use alloc::vec::Vec;
 
-/// `RingBuffer` is a constain space data structure, which maintain itself by indies of head and tail.
+/// `RingBuffer`.
 ///
 /// # Example:
 ///
@@ -23,9 +23,17 @@ use alloc::vec::Vec;
 /// fn ring_value() {
 ///     let size = 10;
 ///     let mut ring = RingBuffer::init(size);
-///
+///     assert_eq!(0, ring.head);
+///     assert_eq!(0, ring.tail);
+/// 
 ///     ring.push(1);
+///     assert_eq!(1, ring.head);
+///     assert_eq!(0, ring.tail);
+/// 
 ///     assert_eq!(Some(1), ring.pop());
+///     assert_eq!(1, ring.head);
+///     assert_eq!(1, ring.tail);
+///     assert_eq!(None, ring.pop());
 /// }
 ///
 /// fn ring_vector() {
@@ -37,16 +45,25 @@ use alloc::vec::Vec;
 ///
 ///     assert_eq!(Some(vec![1,2]), ring.popv(2));
 /// }
+/// 
+/// fn ring_with_vector() {
+///     let buf = vec![None; 5];
+///     let mut ring = RingBuffer::init_with_vec(buf);
+///     ring.push(1);
+///     assert_eq!(Some(1), ring.pop());
+///     assert_eq!(None, ring.pop());
+/// }
 ///
 /// fn main() {
 ///     ring_value();
 ///     ring_vector();
+///     ring_with_vector();
 /// }
 /// ```
 pub struct RingBuffer<T> {
-    head: usize,
-    tail: usize,
-    size: usize,
+    pub head: usize,
+    pub tail: usize,
+    pub size: usize,
     buf: Vec<Option<T>>,
 }
 
